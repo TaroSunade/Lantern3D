@@ -67,9 +67,9 @@ public:
                         autoRotate(true), rotateSpeed(0.5), modelLoaded(false),
                         bounceTime(0.0), bounceAmp(0.08), hasBmpTexture(false),
                         dualLight(true) {
-        light2.SetPos(0, -0.3, -1.5);           // front headlight, close to car
+        light2.SetPos(0, -0.2, -2.5);           // in front of car, outside bounding box
         light2.color = Vec3(1.0, 0.7, 0.2);     // amber/orange
-        light2.intensity = 3.0;                  // strong
+        light2.intensity = 4.0;                  // strong frontal glow
         BuildFallbackCube();
     }
 
