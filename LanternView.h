@@ -35,6 +35,8 @@ public:
     afx_msg void OnLoadTexture();
     afx_msg void OnBlinnPhong();
     afx_msg void OnUpdateBlinnPhong(CCmdUI* p);
+    afx_msg void OnDualLight();
+    afx_msg void OnUpdateDualLight(CCmdUI* p);
     afx_msg void OnToggleAnimation();
     afx_msg void OnUpdateToggleAnimation(CCmdUI* p);
     DECLARE_MESSAGE_MAP()

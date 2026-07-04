@@ -60,10 +60,18 @@ public:
     double bounceTime;      // bounce animation timer
     double bounceAmp;       // bounce amplitude (0.0 = disabled)
     bool hasBmpTexture;     // true if external BMP texture loaded
+    bool dualLight;         // dual-light stage lighting toggle
+    CLightSource light2;    // second light (warm headlight)
 
     CRenderPipeline() : mode(RM_PHONG), angleX(0.2), angleY(0.0), zoom(3.5),
                         autoRotate(true), rotateSpeed(0.5), modelLoaded(false),
-                        bounceTime(0.0), bounceAmp(0.08), hasBmpTexture(false) {
+                        bounceTime(0.0), bounceAmp(0.08), hasBmpTexture(false),
+                        dualLight(true) {
+        light2.SetPos(-2, 1.0, -3.5);    // front-left warm headlight
+        light2.color = Vec3(1.0, 0.85, 0.4);  // warm yellow
+        light2.intensity = 1.8;
+        BuildFallbackCube();
+    }
         BuildFallbackCube();  // always have a renderable model
     }
 
@@ -201,6 +209,8 @@ public:
         // Keep lighting inputs in view space, matching transformed vertices.
         CLightSource viewLight = light;
         viewLight.position = viewMatrix.TransformPoint(light.position);
+        CLightSource viewLight2 = light2;
+        viewLight2.position = viewMatrix.TransformPoint(light2.position);
 
         std::vector<Vec3> viewVertices(model.vertices.size());
         for (size_t i = 0; i < model.vertices.size(); i++)
@@ -240,7 +250,7 @@ public:
                 DrawWireframe(pDC, wv, scrW, scrH);
             } else {
                 // Filled modes: rasterize triangle to Z-buffer with per-pixel shading
-                Rasterize(pDC, fi, wv, wn, tv, hasN, hasT, viewLight, scrW, scrH);
+                Rasterize(pDC, fi, wv, wn, tv, hasN, hasT, viewLight, viewLight2, scrW, scrH);
             }
         }
     }
@@ -363,7 +373,8 @@ private:
     //      e. Z-buffer test: if depth < zbuffer[x][y], write color + update depth
     // ---------------------------------------------------------------
     void Rasterize(CDC*, size_t fi, Vec3 wv[3], Vec3 wn[3], Vec2 tv[3],
-                   bool hasN, bool hasT, const CLightSource& viewLight, int sw, int sh) {
+                   bool hasN, bool hasT, const CLightSource& viewLight,
+                   const CLightSource& viewLight2, int sw, int sh) {
 
         // Step 1: Project vertices to screen
         int sx[3], sy[3]; double d[3];
@@ -403,6 +414,10 @@ private:
                 unsigned int color;
 
                 // d. Per-pixel shading
+                auto lightColor = [&](const Vec3& wp, const Vec3& n) -> unsigned int {
+                    if (dualLight) return lighting.ComputeDualLight(wp, n, camPos, material, viewLight, viewLight2);
+                    else           return lighting.ComputeColor(wp, n, camPos, material, viewLight);
+                };
                 if (mode == RM_TEXTURED && hasT) {
                     // Texture mapping: interpolate UV, sample texture image
                     double tu = b0*tv[0].u + b1*tv[1].u + b2*tv[2].u;
@@ -411,22 +426,21 @@ private:
                     if (hasN) n = (wn[0]*b0 + wn[1]*b1 + wn[2]*b2).Normalize();
                     else n = (wv[1]-wv[0]).Cross(wv[2]-wv[0]).Normalize();
                     Vec3 wp = wv[0]*b0 + wv[1]*b1 + wv[2]*b2;
-                    color = ModulateColor(texture.Sample(tu, tv2),
-                        lighting.ComputeColor(wp, n, camPos, material, viewLight));
+                    color = ModulateColor(texture.Sample(tu, tv2), lightColor(wp, n));
                 }
                 else if ((mode == RM_PHONG || mode == RM_TEXTURED) && hasN) {
                     // Phong shading: interpolate normal per-pixel, compute Phong lighting
                     Vec3 n = (wn[0]*b0 + wn[1]*b1 + wn[2]*b2).Normalize();
-                    Vec3 wp = wv[0]*b0 + wv[1]*b1 + wv[2]*b2;  // interpolated view position
-                    color = lighting.ComputeColor(wp, n, camPos, material, viewLight);
+                    Vec3 wp = wv[0]*b0 + wv[1]*b1 + wv[2]*b2;
+                    color = lightColor(wp, n);
                 }
                 else {
                     // Flat shading: use face normal, compute Phong lighting
                     Vec3 n;
-                    if (hasN) n = wn[0];  // use first vertex normal
-                    else n = (wv[1]-wv[0]).Cross(wv[2]-wv[0]).Normalize();  // compute from edges
-                    Vec3 wp = wv[0]*b0 + wv[1]*b1 + wv[2]*b2;  // interpolated view position
-                    color = lighting.ComputeColor(wp, n, camPos, material, viewLight);
+                    if (hasN) n = wn[0];
+                    else n = (wv[1]-wv[0]).Cross(wv[2]-wv[0]).Normalize();
+                    Vec3 wp = wv[0]*b0 + wv[1]*b1 + wv[2]*b2;
+                    color = lightColor(wp, n);
                 }
 
                 // e. Z-buffer depth test + write

@@ -26,6 +26,8 @@ BEGIN_MESSAGE_MAP(CLanternView, CView)
     ON_COMMAND(ID_LOAD_TEXTURE, &CLanternView::OnLoadTexture)
     ON_COMMAND(ID_BLINN_PHONG, &CLanternView::OnBlinnPhong)
     ON_UPDATE_COMMAND_UI(ID_BLINN_PHONG, &CLanternView::OnUpdateBlinnPhong)
+    ON_COMMAND(ID_DUAL_LIGHT, &CLanternView::OnDualLight)
+    ON_UPDATE_COMMAND_UI(ID_DUAL_LIGHT, &CLanternView::OnUpdateDualLight)
     ON_COMMAND(ID_ANIMATION_TOGGLE, &CLanternView::OnToggleAnimation)
     ON_UPDATE_COMMAND_UI(ID_ANIMATION_TOGGLE, &CLanternView::OnUpdateToggleAnimation)
 END_MESSAGE_MAP()
@@ -174,6 +176,8 @@ void CLanternView::OnLoadTexture() {
 
 void CLanternView::OnBlinnPhong() { pipeline.lighting.blinnPhong = !pipeline.lighting.blinnPhong; Invalidate(FALSE); }
 void CLanternView::OnUpdateBlinnPhong(CCmdUI* p) { p->SetCheck(pipeline.lighting.blinnPhong); }
+void CLanternView::OnDualLight() { pipeline.dualLight = !pipeline.dualLight; Invalidate(FALSE); }
+void CLanternView::OnUpdateDualLight(CCmdUI* p) { p->SetCheck(pipeline.dualLight); }
 void CLanternView::OnToggleAnimation() { pipeline.autoRotate = !pipeline.autoRotate; Invalidate(FALSE); }
 void CLanternView::OnUpdateToggleAnimation(CCmdUI* p) { p->SetCheck(pipeline.autoRotate); }
 

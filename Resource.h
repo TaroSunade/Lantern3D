@@ -10,6 +10,7 @@
 #define ID_LIGHT_SETTINGS       32777
 #define ID_LOAD_TEXTURE         32778
 #define ID_BLINN_PHONG          32779
+#define ID_DUAL_LIGHT           32780
 
 // Light settings dialog
 #define IDD_LIGHT_DLG           200
