@@ -32,6 +32,9 @@ public:
     afx_msg void OnUpdateModePhong(CCmdUI* p);
     afx_msg void OnUpdateModeTextured(CCmdUI* p);
     afx_msg void OnLightSettings();
+    afx_msg void OnLoadTexture();
+    afx_msg void OnBlinnPhong();
+    afx_msg void OnUpdateBlinnPhong(CCmdUI* p);
     afx_msg void OnToggleAnimation();
     afx_msg void OnUpdateToggleAnimation(CCmdUI* p);
     DECLARE_MESSAGE_MAP()

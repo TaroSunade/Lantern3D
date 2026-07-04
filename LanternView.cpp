@@ -23,6 +23,9 @@ BEGIN_MESSAGE_MAP(CLanternView, CView)
     ON_UPDATE_COMMAND_UI(ID_MODE_PHONG, &CLanternView::OnUpdateModePhong)
     ON_UPDATE_COMMAND_UI(ID_MODE_TEXTURED, &CLanternView::OnUpdateModeTextured)
     ON_COMMAND(ID_LIGHT_SETTINGS, &CLanternView::OnLightSettings)
+    ON_COMMAND(ID_LOAD_TEXTURE, &CLanternView::OnLoadTexture)
+    ON_COMMAND(ID_BLINN_PHONG, &CLanternView::OnBlinnPhong)
+    ON_UPDATE_COMMAND_UI(ID_BLINN_PHONG, &CLanternView::OnUpdateBlinnPhong)
     ON_COMMAND(ID_ANIMATION_TOGGLE, &CLanternView::OnToggleAnimation)
     ON_UPDATE_COMMAND_UI(ID_ANIMATION_TOGGLE, &CLanternView::OnUpdateToggleAnimation)
 END_MESSAGE_MAP()
@@ -83,8 +86,9 @@ void CLanternView::OnDraw(CDC* pDC) {
 
     const TCHAR* names[] = { _T("Wireframe"), _T("Flat"), _T("Gouraud"), _T("Phong"), _T("Material"), _T("OpenGL") };
     CString info;
-    info.Format(_T("Mode: %s | Light(%.1f,%.1f,%.1f) | RX:%.0f RY:%.0f | Zoom:%.1f | %s | Model: %s"),
+    info.Format(_T("Mode: %s | %s | Light(%.1f,%.1f,%.1f) | RX:%.0f RY:%.0f | Zoom:%.1f | %s | Model: %s"),
         names[pipeline.mode],
+        pipeline.lighting.blinnPhong ? _T("Blinn-Phong") : _T("Phong"),
         pipeline.light.position.x, pipeline.light.position.y, pipeline.light.position.z,
         pipeline.angleX * 180 / 3.14159, pipeline.angleY * 180 / 3.14159,
         pipeline.zoom,
@@ -153,6 +157,23 @@ void CLanternView::OnLightSettings() {
     dlg.m_lightZ=pipeline.light.position.z; dlg.m_intensity=pipeline.light.intensity;
     if (dlg.DoModal()==IDOK) { pipeline.light.SetPos(dlg.m_lightX,dlg.m_lightY,dlg.m_lightZ); pipeline.light.intensity=dlg.m_intensity; Invalidate(FALSE); }
 }
+
+void CLanternView::OnLoadTexture() {
+    CFileDialog dlg(TRUE, _T("bmp"), NULL, OFN_FILEMUSTEXIST, _T("BMP Files (*.bmp)|*.bmp||"), this);
+    if (dlg.DoModal() == IDOK) {
+        CT2CA conv(dlg.GetPathName());
+        if (pipeline.texture.LoadBMP(conv)) {
+            pipeline.hasBmpTexture = true;
+            pipeline.mode = RM_TEXTURED;
+            Invalidate(FALSE);
+        } else {
+            AfxMessageBox(_T("Failed to load BMP texture."));
+        }
+    }
+}
+
+void CLanternView::OnBlinnPhong() { pipeline.lighting.blinnPhong = !pipeline.lighting.blinnPhong; Invalidate(FALSE); }
+void CLanternView::OnUpdateBlinnPhong(CCmdUI* p) { p->SetCheck(pipeline.lighting.blinnPhong); }
 void CLanternView::OnToggleAnimation() { pipeline.autoRotate = !pipeline.autoRotate; Invalidate(FALSE); }
 void CLanternView::OnUpdateToggleAnimation(CCmdUI* p) { p->SetCheck(pipeline.autoRotate); }
 

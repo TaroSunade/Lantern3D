@@ -56,8 +56,14 @@ public:
     double rotateSpeed; // auto-rotation speed (rad/sec)
     bool modelLoaded;   // whether external OBJ was successfully loaded
 
+    // --- Advanced features ---
+    double bounceTime;      // bounce animation timer
+    double bounceAmp;       // bounce amplitude (0.0 = disabled)
+    bool hasBmpTexture;     // true if external BMP texture loaded
+
     CRenderPipeline() : mode(RM_PHONG), angleX(0.2), angleY(0.0), zoom(3.5),
-                        autoRotate(true), rotateSpeed(0.5), modelLoaded(false) {
+                        autoRotate(true), rotateSpeed(0.5), modelLoaded(false),
+                        bounceTime(0.0), bounceAmp(0.08), hasBmpTexture(false) {
         BuildFallbackCube();  // always have a renderable model
     }
 
@@ -101,8 +107,10 @@ public:
     // ---------------------------------------------------------------
     void Animate(double dt) {
         if (dt <= 0.0 || dt > 0.5) return;
-        if (autoRotate)
+        if (autoRotate) {
             angleY += rotateSpeed * dt;
+            bounceTime += rotateSpeed * 3.0 * dt;  // bounce sync'd with rotation
+        }
     }
 
     // ---------------------------------------------------------------
@@ -159,6 +167,9 @@ public:
     // ---------------------------------------------------------------
     void SetupWorld() {
         worldMatrix.Identity();
+        // Composite animation: bounce (translation) + scale + rotation
+        if (autoRotate && bounceAmp > 0.0)
+            worldMatrix = CTransform::Multiply(worldMatrix, CTransform::Translate(0, sin(bounceTime) * bounceAmp, 0));
         worldMatrix = CTransform::Multiply(worldMatrix, CTransform::Scale(1.5, 1.5, 1.5));
         worldMatrix = CTransform::Multiply(worldMatrix, CTransform::RotateX(angleX));
         worldMatrix = CTransform::Multiply(worldMatrix, CTransform::RotateY(angleY));
@@ -256,6 +267,9 @@ public:
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glTranslated(0.0, 0.0, -zoom);
+
+        if (autoRotate && bounceAmp > 0.0)
+            glTranslated(0, sin(bounceTime) * bounceAmp, 0);
 
         GLfloat lightPos[] = { (GLfloat)light.position.x, (GLfloat)light.position.y, (GLfloat)light.position.z, 1.0f };
         GLfloat lightColor[] = { (GLfloat)light.color.x, (GLfloat)light.color.y, (GLfloat)light.color.z, 1.0f };
