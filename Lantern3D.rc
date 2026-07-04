@@ -1,0 +1,68 @@
+#include "resource.h"
+#include "afxres.h"
+
+IDR_MAINFRAME MENU
+BEGIN
+    POPUP "&Render Mode"
+    BEGIN
+        MENUITEM "&Wireframe\tCtrl+1",      ID_MODE_WIREFRAME
+        MENUITEM "&Flat Shading\tCtrl+2",    ID_MODE_FLAT
+        MENUITEM "&Gouraud Shading\tCtrl+3", ID_MODE_GOURAUD
+        MENUITEM "&Phong Lighting\tCtrl+4",  ID_MODE_PHONG
+        MENUITEM "&Texture Mapping\tCtrl+5", ID_MODE_TEXTURED
+    END
+    POPUP "&Settings"
+    BEGIN
+        MENUITEM "&Light Source...\tCtrl+L", ID_LIGHT_SETTINGS
+        MENUITEM SEPARATOR
+        MENUITEM "&Auto Rotation\tCtrl+R",   ID_ANIMATION_TOGGLE
+    END
+END
+
+IDR_MAINFRAME TOOLBAR 24,24
+BEGIN
+    BUTTON ID_MODE_WIREFRAME
+    BUTTON ID_MODE_FLAT
+    BUTTON ID_MODE_PHONG
+    BUTTON ID_MODE_TEXTURED
+    SEPARATOR
+    BUTTON ID_ANIMATION_TOGGLE
+    BUTTON ID_LIGHT_SETTINGS
+END
+
+IDR_MAINFRAME ACCELERATORS
+BEGIN
+    "1", ID_MODE_WIREFRAME, VIRTKEY, CONTROL, NOINVERT
+    "2", ID_MODE_FLAT,      VIRTKEY, CONTROL, NOINVERT
+    "3", ID_MODE_GOURAUD,   VIRTKEY, CONTROL, NOINVERT
+    "4", ID_MODE_PHONG,     VIRTKEY, CONTROL, NOINVERT
+    "5", ID_MODE_TEXTURED,  VIRTKEY, CONTROL, NOINVERT
+    "R", ID_ANIMATION_TOGGLE, VIRTKEY, CONTROL, NOINVERT
+    "L", ID_LIGHT_SETTINGS, VIRTKEY, CONTROL, NOINVERT
+END
+
+IDD_LIGHT_DLG DIALOGEX 0, 0, 260, 150
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Light Source Settings"
+FONT 9, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    GROUPBOX    "Light Position",         -1, 10,10,240,55
+    LTEXT       "X:",                     -1, 25,28,15,12
+    EDITTEXT    IDC_LIGHT_X,               40,26,50,14, ES_AUTOHSCROLL
+    LTEXT       "Y:",                     -1, 105,28,15,12
+    EDITTEXT    IDC_LIGHT_Y,              120,26,50,14, ES_AUTOHSCROLL
+    LTEXT       "Z:",                     -1, 185,28,15,12
+    EDITTEXT    IDC_LIGHT_Z,              200,26,40,14, ES_AUTOHSCROLL
+
+    GROUPBOX    "Light Properties",       -1, 10,70,240,40
+    LTEXT       "Intensity (0.0-2.0):",   -1, 25,86,70,12
+    EDITTEXT    IDC_INTENSITY,            100,84,50,14, ES_AUTOHSCROLL
+
+    DEFPUSHBUTTON "OK",                   IDOK,      150,125,50,14
+    PUSHBUTTON    "Cancel",               IDCANCEL,  205,125,50,14
+END
+
+STRINGTABLE
+BEGIN
+    IDR_MAINFRAME "Lantern3D\n\nLantern3D\n\n\nLantern3D.Document\nLantern3D.Document"
+END

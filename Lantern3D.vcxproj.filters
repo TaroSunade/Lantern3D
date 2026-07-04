@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="渲染管线">
+      <UniqueIdentifier>{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Lantern3D.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LanternDoc.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LanternView.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LightSettingsDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Lantern3D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LanternDoc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LanternView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LightSettingsDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="OBJLoader.h">
+      <Filter>渲染管线</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>渲染管线</Filter>
+    </ClInclude>
+    <ClInclude Include="Projection.h">
+      <Filter>渲染管线</Filter>
+    </ClInclude>
+    <ClInclude Include="ZBuffer.h">
+      <Filter>渲染管线</Filter>
+    </ClInclude>
+    <ClInclude Include="Lighting.h">
+      <Filter>渲染管线</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>渲染管线</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderPipeline.h">
+      <Filter>渲染管线</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Lantern3D.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\Lantern3D.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
