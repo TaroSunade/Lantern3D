@@ -43,7 +43,7 @@ public:
         }
         // Distance attenuation: 1 / (1 + dist² * k)
         double dist = (light.position - worldPos).Length();
-        double atten = 1.0 / (1.0 + dist * dist * 0.02);
+        double atten = 1.0 / (1.0 + dist * dist * 0.005);
 
         double r = mat.ambient.x * 0.25 + (mat.diffuse.x * ndotl + mat.specular.x * spec)
                    * light.color.x * atten;
