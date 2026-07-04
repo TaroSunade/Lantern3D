@@ -72,8 +72,6 @@ public:
         light2.intensity = 1.8;
         BuildFallbackCube();
     }
-        BuildFallbackCube();  // always have a renderable model
-    }
 
     // ---------------------------------------------------------------
     // Load model from external OBJ file. Falls back to built-in cube.
